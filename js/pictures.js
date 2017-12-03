@@ -67,6 +67,7 @@ var insertElements = function (photos, parentNode) {
 var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
 var container = document.querySelector('.pictures');
 var gallery = document.querySelector('.gallery-overlay');
+var photos = createPhotosProperties(PHOTOS_COUNT);
 
 var renderOverlay = function (photo, overlay) {
   var image = overlay.querySelector('.gallery-overlay-image');
@@ -77,8 +78,6 @@ var renderOverlay = function (photo, overlay) {
   likes.textContent = photo.likes;
   comments.textContent = photo.comments.length;
 };
-
-var photos = createPhotosProperties(PHOTOS_COUNT);
 
 insertElements(photos, container);
 renderOverlay(photos[0], gallery);
