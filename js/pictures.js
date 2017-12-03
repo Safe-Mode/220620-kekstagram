@@ -54,9 +54,8 @@ var renderPhoto = function (photos) {
   return photoElement;
 };
 
-var insertElements = function (parentNode) {
+var insertElements = function (photos, parentNode) {
   var fragment = document.createDocumentFragment();
-  var photos = createPhotosProperties(PHOTOS_COUNT);
 
   for (var i = 0; i < photos.length; i++) {
     fragment.appendChild(renderPhoto(photos[i]));
@@ -69,16 +68,18 @@ var pictureTemplate = document.querySelector('#picture-template').content.queryS
 var container = document.querySelector('.pictures');
 var gallery = document.querySelector('.gallery-overlay');
 
-var renderOverlay = function (overlay) {
+var renderOverlay = function (photo, overlay) {
   var image = overlay.querySelector('.gallery-overlay-image');
   var likes = overlay.querySelector('.likes-count');
   var comments = overlay.querySelector('.comments-count');
 
-  image.src = createPhotosProperties(PHOTOS_COUNT)[1].url;
-  likes.textContent = createPhotosProperties(PHOTOS_COUNT)[1].likes;
-  comments.textContent = createPhotosProperties(PHOTOS_COUNT)[1].comments.length;
+  image.src = photo.url;
+  likes.textContent = photo.likes;
+  comments.textContent = photo.comments.length;
 };
 
-insertElements(container);
-renderOverlay(gallery);
+var photos = createPhotosProperties(PHOTOS_COUNT);
+
+insertElements(photos, container);
+renderOverlay(photos[0], gallery);
 gallery.classList.remove('hidden');
