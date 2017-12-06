@@ -95,17 +95,17 @@ var photos = container.querySelectorAll('.picture');
 
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    closePopup();
+    closePopup(galleryOverlay);
   }
 };
 
-var openPopup = function () {
-  galleryOverlay.classList.remove('hidden');
+var openPopup = function (popup) {
+  popup.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscPress);
 };
 
-var closePopup = function () {
-  galleryOverlay.classList.add('hidden');
+var closePopup = function (popup) {
+  popup.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
@@ -116,9 +116,17 @@ photos.forEach(function (item, index) {
     evt.preventDefault();
 
     renderOverlay(photoProperties[index], galleryOverlay);
-    openPopup();
+    openPopup(galleryOverlay);
   };
 
   item.addEventListener('click', onItemClick);
-  close.addEventListener('click', closePopup);
+  close.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    closePopup(galleryOverlay);
+  });
+  close.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      closePopup(galleryOverlay);
+    }
+  });
 });
