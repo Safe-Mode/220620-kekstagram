@@ -67,8 +67,8 @@ var insertElements = function (elements, parentNode) {
 };
 
 var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
-var container = document.querySelector('.pictures');
-var galleryOverlay = document.querySelector('.gallery-overlay');
+var pisturesElement = document.querySelector('.pictures');
+var galleryOverlayElement = document.querySelector('.gallery-overlay');
 var photoProperties = createPhotoProperties(PHOTOS_COUNT);
 
 var renderOverlay = function (photo, overlay) {
@@ -81,9 +81,9 @@ var renderOverlay = function (photo, overlay) {
   comments.textContent = photo.comments.length;
 };
 
-insertElements(photoProperties, container);
+insertElements(photoProperties, pisturesElement);
 
-var photos = container.querySelectorAll('.picture');
+var photosElement = pisturesElement.querySelectorAll('.picture');
 
 // var toggleOverlay = function (overlay) {
 //   if (overlay.classList.contains('hidden')) {
@@ -95,7 +95,7 @@ var photos = container.querySelectorAll('.picture');
 
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    closePopup(galleryOverlay);
+    closePopup(galleryOverlayElement);
   }
 };
 
@@ -109,24 +109,24 @@ var closePopup = function (popup) {
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
-photos.forEach(function (item, index) {
-  var close = galleryOverlay.querySelector('.gallery-overlay-close');
+photosElement.forEach(function (item, index) {
+  var close = galleryOverlayElement.querySelector('.gallery-overlay-close');
 
   var onItemClick = function (evt) {
     evt.preventDefault();
 
-    renderOverlay(photoProperties[index], galleryOverlay);
-    openPopup(galleryOverlay);
+    renderOverlay(photoProperties[index], galleryOverlayElement);
+    openPopup(galleryOverlayElement);
   };
 
   item.addEventListener('click', onItemClick);
   close.addEventListener('click', function (evt) {
     evt.preventDefault();
-    closePopup(galleryOverlay);
+    closePopup(galleryOverlayElement);
   });
   close.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      closePopup(galleryOverlay);
+      closePopup(galleryOverlayElement);
     }
   });
 });
