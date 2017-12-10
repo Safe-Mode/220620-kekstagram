@@ -259,20 +259,28 @@ uploadHashtagsElement.addEventListener('change', function (evt) {
 
   if (hashtags.length > HASHTAG_COUNT) {
     target.style.borderColor = 'red';
+  } else {
+    target.style.borderColor = '';
   }
 
   for (var i = 0; i < hashtags.length; i++) {
     if (hashtags[i][0] !== HASHTAG_SYMBOL) {
       target.style.borderColor = 'red';
+    } else {
+      target.style.borderColor = '';
     }
 
     if (hashtags[i].length > HASHTAG_LENGTH) {
       target.style.borderColor = 'red';
+    } else {
+      target.style.borderColor = '';
     }
 
     for (var j = 0; j < hashtags.length; j++) {
       if (hashtags[i] === hashtags[j] && i !== j) {
         target.style.borderColor = 'red';
+      } else {
+        target.style.borderColor = '';
       }
     }
   }
