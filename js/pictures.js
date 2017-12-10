@@ -214,7 +214,7 @@ var getScaleValue = function (input, operator) {
   var min = parseInt(input.dataset.min, RADIX);
   var max = parseInt(input.dataset.max, RADIX);
 
-  if (value !== min && value !== max) {
+  if (value !== min || value !== max) {
     var result;
 
     if (operator === 'dec') {
@@ -237,14 +237,17 @@ var getScaleValue = function (input, operator) {
   }
 };
 
-uploadRezizeDecElement.addEventListener('click', function (evt) {
+var onResizeDecClick = function (evt) {
   evt.preventDefault();
   var OPERATOR = 'dec';
   getScaleValue(uploadResizeValueElement, OPERATOR);
-});
+};
 
-uploadRezizeIncElement.addEventListener('click', function (evt) {
+var inResizeIncClick = function (evt) {
   evt.preventDefault();
   var OPERATOR = 'inc';
   getScaleValue(uploadResizeValueElement, OPERATOR);
-});
+};
+
+uploadRezizeDecElement.addEventListener('click', onResizeDecClick);
+uploadRezizeIncElement.addEventListener('click', inResizeIncClick);
