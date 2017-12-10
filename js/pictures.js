@@ -231,8 +231,9 @@ var getScaleValue = function (input, operator) {
     }
 
     input.value = result + '%';
-    return result;
   }
+
+  return result;
 };
 
 var onResizeDecClick = function (evt) {
@@ -274,6 +275,8 @@ uploadHashtagsElement.addEventListener('change', function (evt) {
 
   if (hashtags.length > HASHTAG_COUNT) {
     target.style.borderColor = 'red';
+    target.setCustomValidity('Максимальное число хэштэгов - ' + HASHTAG_COUNT);
+    return;
   } else {
     target.style.borderColor = '';
   }
@@ -281,12 +284,17 @@ uploadHashtagsElement.addEventListener('change', function (evt) {
   for (var i = 0; i < hashtags.length; i++) {
     if (hashtags[i][0] !== HASHTAG_SYMBOL) {
       target.style.borderColor = 'red';
+      target.setCustomValidity('Хэштэг должен начинаться со знака #');
+      return;
     } else {
       target.style.borderColor = '';
+      target.setCustomValidity('');
     }
 
     if (hashtags[i].length > HASHTAG_LENGTH) {
       target.style.borderColor = 'red';
+      target.setCustomValidity('Максимальная длина хэштэга - ' + HASHTAG_LENGTH + ' символов');
+      return;
     } else {
       target.style.borderColor = '';
     }
@@ -294,11 +302,12 @@ uploadHashtagsElement.addEventListener('change', function (evt) {
     for (var j = 0; j < hashtags.length; j++) {
       if (hashtags[i] === hashtags[j] && i !== j) {
         target.style.borderColor = 'red';
+        target.setCustomValidity('Хэштэги не должны повторяться');
+        return;
       } else {
         target.style.borderColor = '';
+        target.setCustomValidity('');
       }
     }
   }
-
-  console.log(hashtags);
 });
