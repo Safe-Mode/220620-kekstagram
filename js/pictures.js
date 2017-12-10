@@ -15,6 +15,13 @@ var COMMENTS_MIN = 0;
 var COMMENTS_MAX = 5;
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var EFFECTS = [
+  'chrome',
+  'sepia',
+  'marvin',
+  'phobos',
+  'heat'
+];
 
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -140,6 +147,7 @@ var uploadFileElement = uploadFormElement.querySelector('#upload-file');
 var uploadOverlayElement = uploadFormElement.querySelector('.upload-overlay');
 var uploadCloseElement = uploadFormElement.querySelector('.upload-form-cancel');
 var uploadCommentElement = uploadFormElement.querySelector('.upload-form-description');
+var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
 
 var onUploadFileElementChange = function (evt) {
   evt.preventDefault();
@@ -164,5 +172,33 @@ var onUploadOverlayEscPress = function (evt) {
   }
 };
 
+var removeCurrentEffect = function (element, effectsList) {
+  var imageClasses = element.classList;
+
+  for (var i = 0; i < imageClasses.length; i++) {
+    for (var j = 0; j < effectsList.length; j++) {
+      var effectClass = 'effect-' + effectsList[j];
+
+      if (imageClasses[i] === effectClass) {
+        element.classList.remove(imageClasses[i]);
+      }
+    }
+  }
+};
+
+var onEffectRadioClick = function (evt) {
+  if (evt.target.name === 'effect') {
+    var effect = evt.target.value;
+    var effectStyleClass = 'effect-' + effect;
+
+    removeCurrentEffect(uploadImageElement, EFFECTS);
+
+    if (effect !== 'none') {
+      uploadImageElement.classList.add(effectStyleClass);
+    }
+  }
+};
+
 uploadFileElement.addEventListener('change', onUploadFileElementChange);
 uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
+uploadOverlayElement.addEventListener('click', onEffectRadioClick);
