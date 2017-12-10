@@ -148,6 +148,9 @@ var uploadOverlayElement = uploadFormElement.querySelector('.upload-overlay');
 var uploadCloseElement = uploadFormElement.querySelector('.upload-form-cancel');
 var uploadCommentElement = uploadFormElement.querySelector('.upload-form-description');
 var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
+var uploadResizeValueElement = uploadFormElement.querySelector('.upload-resize-controls-value');
+var uploadRezizeIncElement = uploadFormElement.querySelector('.upload-resize-controls-button-inc');
+var uploadRezizeDecElement = uploadFormElement.querySelector('.upload-resize-controls-button-dec');
 
 var onUploadFileElementChange = function (evt) {
   evt.preventDefault();
@@ -202,3 +205,46 @@ var onEffectRadioClick = function (evt) {
 uploadFileElement.addEventListener('change', onUploadFileElementChange);
 uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
 uploadOverlayElement.addEventListener('click', onEffectRadioClick);
+
+var getScaleValue = function (input, operator) {
+  var RADIX = 10;
+
+  var value = parseInt(input.value, RADIX);
+  var step = parseInt(input.dataset.step, RADIX);
+  var min = parseInt(input.dataset.min, RADIX);
+  var max = parseInt(input.dataset.max, RADIX);
+
+  if (value !== min && value !== max) {
+    var result;
+
+    if (operator === 'dec') {
+      result = value - step;
+    }
+
+    if (operator === 'inc') {
+      result = value + step;
+    }
+
+    if (result < min) {
+      result = min;
+    }
+
+    if (result > max) {
+      result = max;
+    }
+
+    input.value = result + '%';
+  }
+};
+
+uploadRezizeDecElement.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  var OPERATOR = 'dec';
+  getScaleValue(uploadResizeValueElement, OPERATOR);
+});
+
+uploadRezizeIncElement.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  var OPERATOR = 'inc';
+  getScaleValue(uploadResizeValueElement, OPERATOR);
+});
