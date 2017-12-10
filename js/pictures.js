@@ -231,19 +231,34 @@ var getScaleValue = function (input, operator) {
     }
 
     input.value = result + '%';
+    return result;
   }
 };
 
 var onResizeDecClick = function (evt) {
   evt.preventDefault();
+
+  var RADIX = 10;
   var OPERATOR = 'dec';
-  getScaleValue(uploadResizeValueElement, OPERATOR);
+  var FACTOR = 100;
+
+  var resizeValue = getScaleValue(uploadResizeValueElement, OPERATOR);
+  var scaleValue = parseInt(resizeValue, RADIX) / FACTOR;
+
+  uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
 };
 
 var inResizeIncClick = function (evt) {
   evt.preventDefault();
+
+  var RADIX = 10;
   var OPERATOR = 'inc';
-  getScaleValue(uploadResizeValueElement, OPERATOR);
+  var FACTOR = 100;
+
+  var resizeValue = getScaleValue(uploadResizeValueElement, OPERATOR);
+  var scaleValue = parseInt(resizeValue, RADIX) / FACTOR;
+
+  uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
 };
 
 uploadRezizeDecElement.addEventListener('click', onResizeDecClick);
