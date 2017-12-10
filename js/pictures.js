@@ -85,13 +85,15 @@ insertElements(photoProperties, pisturesElement);
 
 var photosElement = pisturesElement.querySelectorAll('.picture');
 
-// var toggleOverlay = function (overlay) {
-//   if (overlay.classList.contains('hidden')) {
-//     overlay.classList.remove('hidden');
-//   } else {
-//     overlay.classList.add('hidden');
-//   }
-// };
+var toggleOverlay = function (overlay) {
+  if (overlay.classList.contains('hidden')) {
+    overlay.classList.remove('hidden');
+    document.addEventListener('keydown', onUploadOverlayEscPress);
+  } else {
+    overlay.classList.add('hidden');
+    document.removeEventListener('keydown', onUploadOverlayEscPress);
+  }
+};
 
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -101,11 +103,13 @@ var onPopupEscPress = function (evt) {
 
 var openPopup = function (popup) {
   popup.classList.remove('hidden');
+  // toggleOverlay(popup);
   document.addEventListener('keydown', onPopupEscPress);
 };
 
 var closePopup = function (popup) {
   popup.classList.add('hidden');
+  // toggleOverlay(popup);
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
@@ -130,3 +134,35 @@ photosElement.forEach(function (item, index) {
     }
   });
 });
+
+var uploadFormElement = document.querySelector('#upload-select-image');
+var uploadFileElement = uploadFormElement.querySelector('#upload-file');
+var uploadOverlayElement = uploadFormElement.querySelector('.upload-overlay');
+var uploadCloseElement = uploadFormElement.querySelector('.upload-form-cancel');
+var uploadCommentElement = uploadFormElement.querySelector('.upload-form-description');
+
+var onUploadFileElementChange = function (evt) {
+  evt.preventDefault();
+  toggleOverlay(uploadOverlayElement);
+};
+
+var onUploadCloseElementClick = function (evt) {
+  evt.preventDefault();
+
+  toggleOverlay(uploadOverlayElement);
+  uploadFileElement.value = '';
+};
+
+var onUploadOverlayEscPress = function (evt) {
+  evt.preventDefault();
+
+  var activeElement = document.activeElement;
+
+  if (evt.keyCode === ESC_KEYCODE && activeElement !== uploadCommentElement) {
+    toggleOverlay(uploadOverlayElement);
+    uploadFileElement.value = '';
+  }
+};
+
+uploadFileElement.addEventListener('change', onUploadFileElementChange);
+uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
