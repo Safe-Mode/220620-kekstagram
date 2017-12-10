@@ -91,6 +91,7 @@ var renderOverlay = function (photo, overlay) {
 insertElements(photoProperties, pisturesElement);
 
 var photosElement = pisturesElement.querySelectorAll('.picture');
+var close = galleryOverlayElement.querySelector('.gallery-overlay-close');
 
 var toggleOverlay = function (overlay) {
   if (overlay.classList.contains('hidden')) {
@@ -110,19 +111,28 @@ var onPopupEscPress = function (evt) {
 
 var openPopup = function (popup) {
   popup.classList.remove('hidden');
-  // toggleOverlay(popup);
   document.addEventListener('keydown', onPopupEscPress);
+  // toggleOverlay(popup);
 };
 
 var closePopup = function (popup) {
   popup.classList.add('hidden');
-  // toggleOverlay(popup);
   document.removeEventListener('keydown', onPopupEscPress);
+  // toggleOverlay(popup);
 };
 
-photosElement.forEach(function (item, index) {
-  var close = galleryOverlayElement.querySelector('.gallery-overlay-close');
+close.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  closePopup(galleryOverlayElement);
+});
 
+close.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup(galleryOverlayElement);
+  }
+});
+
+photosElement.forEach(function (item, index) {
   var onItemClick = function (evt) {
     evt.preventDefault();
 
@@ -131,15 +141,6 @@ photosElement.forEach(function (item, index) {
   };
 
   item.addEventListener('click', onItemClick);
-  close.addEventListener('click', function (evt) {
-    evt.preventDefault();
-    closePopup(galleryOverlayElement);
-  });
-  close.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      closePopup(galleryOverlayElement);
-    }
-  });
 });
 
 var uploadFormElement = document.querySelector('#upload-select-image');
@@ -151,22 +152,18 @@ var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview'
 var uploadResizeValueElement = uploadFormElement.querySelector('.upload-resize-controls-value');
 var uploadRezizeIncElement = uploadFormElement.querySelector('.upload-resize-controls-button-inc');
 var uploadRezizeDecElement = uploadFormElement.querySelector('.upload-resize-controls-button-dec');
+var uploadHashtagsElement = uploadFormElement.querySelector('.upload-form-hashtags');
 
-var onUploadFileElementChange = function (evt) {
-  evt.preventDefault();
+var onUploadFileElementChange = function () {
   toggleOverlay(uploadOverlayElement);
 };
 
 var onUploadCloseElementClick = function (evt) {
-  evt.preventDefault();
-
   toggleOverlay(uploadOverlayElement);
   uploadFileElement.value = '';
 };
 
 var onUploadOverlayEscPress = function (evt) {
-  evt.preventDefault();
-
   var activeElement = document.activeElement;
 
   if (evt.keyCode === ESC_KEYCODE && activeElement !== uploadCommentElement) {
@@ -251,3 +248,34 @@ var inResizeIncClick = function (evt) {
 
 uploadRezizeDecElement.addEventListener('click', onResizeDecClick);
 uploadRezizeIncElement.addEventListener('click', inResizeIncClick);
+
+uploadHashtagsElement.addEventListener('change', function (evt) {
+  var HASHTAG_SYMBOL = '#';
+  var HASHTAG_COUNT = 5;
+  var HASHTAG_LENGTH = 20;
+
+  var hashtags = evt.currentTarget.value.toLowerCase().split(' ');
+  var target = evt.target;
+
+  if (hashtags.length > HASHTAG_COUNT) {
+    target.style.borderColor = 'red';
+  }
+
+  for (var i = 0; i < hashtags.length; i++) {
+    if (hashtags[i][0] !== HASHTAG_SYMBOL) {
+      target.style.borderColor = 'red';
+    }
+
+    if (hashtags[i].length > HASHTAG_LENGTH) {
+      target.style.borderColor = 'red';
+    }
+
+    for (var j = 0; j < hashtags.length; j++) {
+      if (hashtags[i] === hashtags[j] && i !== j) {
+        target.style.borderColor = 'red';
+      }
+    }
+  }
+
+  console.log(hashtags);
+});
