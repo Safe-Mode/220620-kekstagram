@@ -23,7 +23,7 @@ var EFFECTS = [
   'heat'
 ];
 var RADIX_TEN = 10;
-var OPERATOR_DEC = 'inc';
+var OPERATOR_DEC = 'dec';
 var OPERATOR_INC = 'inc';
 var PERCENT_FACTOR = 100;
 var HASHTAG_SYMBOL = '#';
@@ -240,22 +240,21 @@ var getScaleValue = function (input, operator) {
   return result;
 };
 
-var onResizeDecClick = function (evt) {
-  evt.preventDefault();
-
-  var resizeValue = getScaleValue(uploadResizeValueElement, OPERATOR_DEC);
-  var scaleValue = parseInt(resizeValue, RADIX_TEN) / PERCENT_FACTOR;
+var setScaleValue = function (operator, factor, radix) {
+  var resizeValue = getScaleValue(uploadResizeValueElement, operator);
+  var scaleValue = parseInt(resizeValue, radix) / factor;
 
   uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
 };
 
-var inResizeIncClick = function (evt) {
+var onResizeDecClick = function (evt) {
   evt.preventDefault();
+  setScaleValue(OPERATOR_DEC, PERCENT_FACTOR, RADIX_TEN);
+};
 
-  var resizeValue = getScaleValue(uploadResizeValueElement, OPERATOR_INC);
-  var scaleValue = parseInt(resizeValue, RADIX_TEN) / PERCENT_FACTOR;
-
-  uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
+var onResizeIncClick = function (evt) {
+  evt.preventDefault();
+  setScaleValue(OPERATOR_INC, PERCENT_FACTOR, RADIX_TEN);
 };
 
 var setErrorState = function (element, message) {
@@ -269,7 +268,7 @@ var setOrdinaryState = function (element) {
 };
 
 uploadRezizeDecElement.addEventListener('click', onResizeDecClick);
-uploadRezizeIncElement.addEventListener('click', inResizeIncClick);
+uploadRezizeIncElement.addEventListener('click', onResizeIncClick);
 
 uploadHashtagsElement.addEventListener('change', function (evt) {
   var hashtags = evt.currentTarget.value.toLowerCase().split(' ');
