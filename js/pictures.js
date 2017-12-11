@@ -85,19 +85,8 @@ var pisturesElement = document.querySelector('.pictures');
 var galleryOverlayElement = document.querySelector('.gallery-overlay');
 var photoProperties = createPhotoProperties(PHOTOS_COUNT);
 
-var renderOverlay = function (photo, overlay) {
-  var image = overlay.querySelector('.gallery-overlay-image');
-  var likes = overlay.querySelector('.likes-count');
-  var comments = overlay.querySelector('.comments-count');
-
-  image.src = photo.url;
-  likes.textContent = photo.likes;
-  comments.textContent = photo.comments.length;
-};
-
 insertElements(photoProperties, pisturesElement);
 
-// var photosElement = pisturesElement.querySelectorAll('.picture');
 var close = galleryOverlayElement.querySelector('.gallery-overlay-close');
 
 var toggleOverlay = function (overlay, escHandler) {
@@ -132,17 +121,27 @@ var getImageProperties = function (image) {
 
   var properties = {
     url: image.src,
-    likes: post.querySelector('.picture-likes'),
-    comments: post.querySelector('.picture-comments')
+    likes: post.querySelector('.picture-likes').textContent,
+    comments: post.querySelector('.picture-comments').textContent
   };
 
   return properties;
 };
 
+var renderOverlay = function (photo, overlay) {
+  var image = overlay.querySelector('.gallery-overlay-image');
+  var likes = overlay.querySelector('.likes-count');
+  var comments = overlay.querySelector('.comments-count');
+
+  image.src = getImageProperties(photo).url;
+  likes.textContent = getImageProperties(photo).likes;
+  comments.textContent = getImageProperties(photo).comments;
+};
+
 var onPhotoClick = function (evt) {
   evt.preventDefault();
 
-  renderOverlay(getImageProperties(evt.target), galleryOverlayElement);
+  renderOverlay(evt.target, galleryOverlayElement);
   toggleOverlay(galleryOverlayElement, onPopupEscPress);
 };
 
