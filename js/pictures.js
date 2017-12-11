@@ -97,7 +97,7 @@ var renderOverlay = function (photo, overlay) {
 
 insertElements(photoProperties, pisturesElement);
 
-var photosElement = pisturesElement.querySelectorAll('.picture');
+// var photosElement = pisturesElement.querySelectorAll('.picture');
 var close = galleryOverlayElement.querySelector('.gallery-overlay-close');
 
 var toggleOverlay = function (overlay, escHandler) {
@@ -127,16 +127,26 @@ close.addEventListener('keydown', function (evt) {
   }
 });
 
-photosElement.forEach(function (item, index) {
-  var onItemClick = function (evt) {
-    evt.preventDefault();
+var getImageProperties = function (image) {
+  var post = image.parentElement;
 
-    renderOverlay(photoProperties[index], galleryOverlayElement);
-    toggleOverlay(galleryOverlayElement, onPopupEscPress);
+  var properties = {
+    url: image.src,
+    likes: post.querySelector('.picture-likes'),
+    comments: post.querySelector('.picture-comments')
   };
 
-  item.addEventListener('click', onItemClick);
-});
+  return properties;
+};
+
+var onPhotoClick = function (evt) {
+  evt.preventDefault();
+
+  renderOverlay(getImageProperties(evt.target), galleryOverlayElement);
+  toggleOverlay(galleryOverlayElement, onPopupEscPress);
+};
+
+pisturesElement.addEventListener('click', onPhotoClick);
 
 var uploadFormElement = document.querySelector('#upload-select-image');
 var uploadFileElement = uploadFormElement.querySelector('#upload-file');
