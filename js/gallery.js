@@ -5,7 +5,7 @@
 
   (function () {
     var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
-  
+
     var renderPhoto = function (photos) {
       var photoElement = pictureTemplate.cloneNode(true);
 
@@ -29,5 +29,4 @@
     window.picturesElement = document.querySelector('.pictures');
     insertElements(window.photoProperties, window.picturesElement);
   })();
-
 })();

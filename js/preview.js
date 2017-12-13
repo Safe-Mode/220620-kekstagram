@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
+  window.ESC_KEYCODE = 27;
+  window.ENTER_KEYCODE = 13;
 
   var galleryOverlayElement = document.querySelector('.gallery-overlay');
   var galleryCloseElement = galleryOverlayElement.querySelector('.gallery-overlay-close');
 
-  var toggleOverlay = function (overlay, escHandler) {
+  window.toggleOverlay = function (overlay, escHandler) {
     if (overlay.classList.contains('hidden')) {
       overlay.classList.remove('hidden');
       document.addEventListener('keydown', escHandler);
@@ -18,7 +18,7 @@
   };
 
   var onPopupEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.keyCode === window.ESC_KEYCODE) {
       toggleOverlay(galleryOverlayElement, onPopupEscPress);
     }
   };
@@ -29,7 +29,7 @@
   });
 
   galleryCloseElement.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
+    if (evt.keyCode === window.ENTER_KEYCODE) {
       toggleOverlay(galleryOverlayElement, onPopupEscPress);
     }
   });
