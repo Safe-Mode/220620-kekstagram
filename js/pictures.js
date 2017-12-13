@@ -17,33 +17,8 @@ var HASHTAG_SYMBOL = '#';
 var HASHTAG_COUNT = 5;
 var HASHTAG_LENGTH = 20;
 
-var renderPhoto = function (photos) {
-  var photoElement = pictureTemplate.cloneNode(true);
-
-  photoElement.querySelector('img').src = photos.url;
-  photoElement.querySelector('.picture-likes').textContent = photos.likes;
-  photoElement.querySelector('.picture-comments').textContent = photos.comments.length;
-
-  return photoElement;
-};
-
-var insertElements = function (elements, parentNode) {
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < elements.length; i++) {
-    fragment.appendChild(renderPhoto(elements[i]));
-  }
-
-  parentNode.appendChild(fragment);
-};
-
-var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
-var pisturesElement = document.querySelector('.pictures');
 var galleryOverlayElement = document.querySelector('.gallery-overlay');
-
-insertElements(window.photoProperties, pisturesElement);
-
-var close = galleryOverlayElement.querySelector('.gallery-overlay-close');
+var galleryCloseElement = galleryOverlayElement.querySelector('.gallery-overlay-close');
 
 var toggleOverlay = function (overlay, escHandler) {
   if (overlay.classList.contains('hidden')) {
@@ -61,12 +36,12 @@ var onPopupEscPress = function (evt) {
   }
 };
 
-close.addEventListener('click', function (evt) {
+galleryCloseElement.addEventListener('click', function (evt) {
   evt.preventDefault();
   toggleOverlay(galleryOverlayElement, onPopupEscPress);
 });
 
-close.addEventListener('keydown', function (evt) {
+galleryCloseElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     toggleOverlay(galleryOverlayElement, onPopupEscPress);
   }
@@ -101,7 +76,7 @@ var onPhotoClick = function (evt) {
   toggleOverlay(galleryOverlayElement, onPopupEscPress);
 };
 
-pisturesElement.addEventListener('click', onPhotoClick);
+window.picturesElement.addEventListener('click', onPhotoClick);
 
 var uploadFormElement = document.querySelector('#upload-select-image');
 var uploadFileElement = uploadFormElement.querySelector('#upload-file');
