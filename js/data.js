@@ -45,5 +45,20 @@
     return photos;
   };
 
-  window.photoProperties = createPhotoProperties(PHOTOS_COUNT);
+  window.data = {
+    ESC_KEYCODE: 27,
+    ENTER_KEYCODE: 13,
+
+    toggleOverlay: function (overlay, escHandler) {
+      if (overlay.classList.contains('hidden')) {
+        overlay.classList.remove('hidden');
+        document.addEventListener('keydown', escHandler);
+      } else {
+        overlay.classList.add('hidden');
+        document.removeEventListener('keydown', escHandler);
+      }
+    },
+
+    photoProperties: createPhotoProperties(PHOTOS_COUNT),
+  };
 })();

@@ -1,32 +1,34 @@
 'use strict';
 
 (function () {
-  'use strict';
+  var picturesElement = document.querySelector('.pictures');
+  var galleryOverlayElement = document.querySelector('.gallery-overlay');
+  var galleryCloseElement = galleryOverlayElement.querySelector('.gallery-overlay-close');
 
-  (function () {
-    var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
+  var onPhotoClick = function (evt) {
+    evt.preventDefault();
 
-    var renderPhoto = function (photos) {
-      var photoElement = pictureTemplate.cloneNode(true);
+    window.preview(evt.target, galleryOverlayElement);
+    window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+  };
 
-      photoElement.querySelector('img').src = photos.url;
-      photoElement.querySelector('.picture-likes').textContent = photos.likes;
-      photoElement.querySelector('.picture-comments').textContent = photos.comments.length;
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === window.data.ESC_KEYCODE) {
+      window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+    }
+  };
 
-      return photoElement;
-    };
+  window.picture(window.data.photoProperties, picturesElement);
+  picturesElement.addEventListener('click', onPhotoClick);
 
-    var insertElements = function (elements, parentNode) {
-      var fragment = document.createDocumentFragment();
+  galleryCloseElement.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+  });
 
-      for (var i = 0; i < elements.length; i++) {
-        fragment.appendChild(renderPhoto(elements[i]));
-      }
-
-      parentNode.appendChild(fragment);
-    };
-
-    window.picturesElement = document.querySelector('.pictures');
-    insertElements(window.photoProperties, window.picturesElement);
-  })();
+  galleryCloseElement.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.data.ENTER_KEYCODE) {
+      window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+    }
+  });
 })();
