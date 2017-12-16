@@ -13,7 +13,7 @@
     return properties;
   };
 
-  window.preview = function (photo, overlay) {
+  window.renderPreview = function (photo, overlay) {
     var image = overlay.querySelector('.gallery-overlay-image');
     var likes = overlay.querySelector('.likes-count');
     var comments = overlay.querySelector('.comments-count');

@@ -8,7 +8,7 @@
   var onPhotoClick = function (evt) {
     evt.preventDefault();
 
-    window.preview(evt.target, galleryOverlayElement);
+    window.renderPreview(evt.target, galleryOverlayElement);
     window.util.toggleOverlay(galleryOverlayElement, onPopupEscPress);
   };
 
@@ -18,7 +18,7 @@
     }
   };
 
-  window.picture(window.data, picturesElement);
+  window.appendPicture(window.data, picturesElement);
   picturesElement.addEventListener('click', onPhotoClick);
 
   galleryCloseElement.addEventListener('click', function (evt) {

@@ -13,7 +13,7 @@
     return photoElement;
   };
 
-  window.picture = function (elements, parentNode) {
+  window.appendPicture = function (elements, parentNode) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < elements.length; i++) {
