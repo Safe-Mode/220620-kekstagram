@@ -28,15 +28,15 @@
   var uploadHashtagsElement = uploadFormElement.querySelector('.upload-form-hashtags');
 
   var onUploadCloseElementClick = function () {
-    window.data.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
+    window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
     uploadFileElement.value = '';
   };
 
   var onUploadOverlayEscPress = function (evt) {
     var activeElement = document.activeElement;
 
-    if (evt.keyCode === window.data.ESC_KEYCODE && activeElement !== uploadCommentElement) {
-      window.data.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
+    if (evt.keyCode === window.util.ESC_KEYCODE && activeElement !== uploadCommentElement) {
+      window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
       uploadFileElement.value = '';
     }
   };
@@ -44,7 +44,7 @@
   var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
 
   var onUploadFileElementChange = function () {
-    window.data.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
+    window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
   };
 
   var removeCurrentEffect = function (element, effectsList) {

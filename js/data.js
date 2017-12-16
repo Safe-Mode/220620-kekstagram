@@ -15,15 +15,11 @@
   var COMMENTS_MIN = 0;
   var COMMENTS_MAX = 5;
 
-  var getRandomInt = function (min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
-
   var getComments = function (count) {
     var comments = [];
 
     for (var i = 0; i < count; i++) {
-      comments[i] = COMMENTS[getRandomInt(0, COMMENTS.length - 1)];
+      comments[i] = COMMENTS[window.util.getRandomInt(0, COMMENTS.length - 1)];
     }
 
     return comments;
@@ -35,8 +31,8 @@
     for (var i = 0; i <= count; i++) {
       var photo = {
         url: 'photos/' + (i + 1) + '.jpg',
-        likes: getRandomInt(LIKES_MIN, LIKES_MAX),
-        comments: getComments(getRandomInt(COMMENTS_MIN, COMMENTS_MAX))
+        likes: window.util.getRandomInt(LIKES_MIN, LIKES_MAX),
+        comments: getComments(window.util.getRandomInt(COMMENTS_MIN, COMMENTS_MAX))
       };
 
       photos[i] = photo;
@@ -45,20 +41,5 @@
     return photos;
   };
 
-  window.data = {
-    ESC_KEYCODE: 27,
-    ENTER_KEYCODE: 13,
-
-    toggleOverlay: function (overlay, escHandler) {
-      if (overlay.classList.contains('hidden')) {
-        overlay.classList.remove('hidden');
-        document.addEventListener('keydown', escHandler);
-      } else {
-        overlay.classList.add('hidden');
-        document.removeEventListener('keydown', escHandler);
-      }
-    },
-
-    photoProperties: createPhotoProperties(PHOTOS_COUNT),
-  };
+  window.data = createPhotoProperties(PHOTOS_COUNT);
 })();

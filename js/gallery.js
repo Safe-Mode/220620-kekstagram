@@ -9,26 +9,26 @@
     evt.preventDefault();
 
     window.preview(evt.target, galleryOverlayElement);
-    window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+    window.util.toggleOverlay(galleryOverlayElement, onPopupEscPress);
   };
 
   var onPopupEscPress = function (evt) {
-    if (evt.keyCode === window.data.ESC_KEYCODE) {
-      window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      window.util.toggleOverlay(galleryOverlayElement, onPopupEscPress);
     }
   };
 
-  window.picture(window.data.photoProperties, picturesElement);
+  window.picture(window.data, picturesElement);
   picturesElement.addEventListener('click', onPhotoClick);
 
   galleryCloseElement.addEventListener('click', function (evt) {
     evt.preventDefault();
-    window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+    window.util.toggleOverlay(galleryOverlayElement, onPopupEscPress);
   });
 
   galleryCloseElement.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.data.ENTER_KEYCODE) {
-      window.data.toggleOverlay(galleryOverlayElement, onPopupEscPress);
+    if (evt.keyCode === window.util.ENTER_KEYCODE) {
+      window.util.toggleOverlay(galleryOverlayElement, onPopupEscPress);
     }
   });
 })();
