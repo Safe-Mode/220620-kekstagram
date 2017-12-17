@@ -83,6 +83,12 @@
     }
   };
 
+  var setDefaultEffectValue = function (pin, fillBar, valueInput) {
+    pin.style.left = '20%';
+    fillBar.style.width = '20%';
+    valueInput.value = parseInt(uploadEffectPinElement.style.left, RADIX_TEN);
+  };
+
   var onEffectRadioClick = function (evt) {
     if (evt.target.name === 'effect') {
       var effect = evt.target.value;
@@ -101,6 +107,7 @@
 
       var currentEffect = defineEffect(uploadImageElement);
 
+      setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
       setEffectValue(currentEffect);
     }
   };
