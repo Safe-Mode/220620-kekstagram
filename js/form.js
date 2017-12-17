@@ -61,6 +61,28 @@
     }
   };
 
+  var defineEffect = function (element) {
+    var currentEffect = element.style.filter || getComputedStyle(element).filter;
+    var effectNameEndIndex = currentEffect.indexOf('(');
+    var currentEffectName = currentEffect.slice(0, effectNameEndIndex);
+
+    return currentEffectName;
+  };
+
+  var setEffectValue = function (effect) {
+    if (effect === 'grayscale' || effect === 'sepia') {
+      uploadImageElement.style.filter = effect + '(' + 0.01 * uploadEffectValueElement.value + ')';
+    } else if (effect === 'invert') {
+      uploadImageElement.style.filter = effect + '(' + uploadEffectValueElement.value + '%' + ')';
+    } else if (effect === 'blur') {
+      uploadImageElement.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + 'px' + ')';
+    } else if (effect === 'brightness') {
+      uploadImageElement.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + ')';
+    } else {
+      uploadImageElement.style.filter = '';
+    }
+  };
+
   var onEffectRadioClick = function (evt) {
     if (evt.target.name === 'effect') {
       var effect = evt.target.value;
@@ -75,7 +97,11 @@
         uploadEffectElement.classList.add('hidden');
       }
 
-      console.log(getComputedStyle(uploadImageElement).filter);
+      uploadImageElement.removeAttribute('style');
+
+      var currentEffect = defineEffect(uploadImageElement);
+
+      setEffectValue(currentEffect);
     }
   };
 
@@ -222,6 +248,10 @@
 
       uploadEffectFillElement.style.width = evt.target.style.left;
       uploadEffectValueElement.value = parseInt(evt.target.style.left, RADIX_TEN);
+
+      var currentEffect = defineEffect(uploadImageElement);
+
+      setEffectValue(currentEffect);
     };
 
     var onMouseUp = function (upEvt) {
