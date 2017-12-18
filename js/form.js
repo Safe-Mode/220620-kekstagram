@@ -240,15 +240,12 @@
       moveEvt.preventDefault();
 
       var shift = startCoordX - moveEvt.clientX;
+      var percent = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift);
 
       startCoordX = moveEvt.clientX;
 
-      if (parseInt(evt.target.offsetLeft, RADIX_TEN) > lineWidth) {
-        evt.target.style.left = '100%';
-        document.removeEventListener('mousemove', onMouseMove);
-      } else if (parseInt(evt.target.offsetLeft, RADIX_TEN) < 0) {
-        evt.target.style.left = '0%';
-        document.removeEventListener('mousemove', onMouseMove);
+      if (percent < 0 || percent > 100) {
+        return;
       } else {
         evt.target.style.left = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
       }
