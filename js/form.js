@@ -61,6 +61,34 @@
     }
   };
 
+  var defineEffect = function (element) {
+    var currentEffect = element.style.filter || getComputedStyle(element).filter;
+    var effectNameEndIndex = currentEffect.indexOf('(');
+    var currentEffectName = currentEffect.slice(0, effectNameEndIndex);
+
+    return currentEffectName;
+  };
+
+  var setEffectValue = function (effect) {
+    if (effect === 'grayscale' || effect === 'sepia') {
+      uploadImageElement.style.filter = effect + '(' + 0.01 * uploadEffectValueElement.value + ')';
+    } else if (effect === 'invert') {
+      uploadImageElement.style.filter = effect + '(' + uploadEffectValueElement.value + '%' + ')';
+    } else if (effect === 'blur') {
+      uploadImageElement.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + 'px' + ')';
+    } else if (effect === 'brightness') {
+      uploadImageElement.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + ')';
+    } else {
+      uploadImageElement.style.filter = '';
+    }
+  };
+
+  var setDefaultEffectValue = function (pin, fillBar, valueInput) {
+    pin.style.left = '20%';
+    fillBar.style.width = '20%';
+    valueInput.value = parseInt(uploadEffectPinElement.style.left, RADIX_TEN);
+  };
+
   var onEffectRadioClick = function (evt) {
     if (evt.target.name === 'effect') {
       var effect = evt.target.value;
@@ -70,7 +98,17 @@
 
       if (effect !== 'none') {
         uploadImageElement.classList.add(effectStyleClass);
+        uploadEffectElement.classList.remove('hidden');
+      } else {
+        uploadEffectElement.classList.add('hidden');
       }
+
+      uploadImageElement.removeAttribute('style');
+
+      var currentEffect = defineEffect(uploadImageElement);
+
+      setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
+      setEffectValue(currentEffect);
     }
   };
 
@@ -184,5 +222,50 @@
         }
       }
     }
+  });
+
+  var uploadEffectElement = uploadFormElement.querySelector('.upload-effect-level');
+  var uploadEffectPinElement = uploadEffectElement.querySelector('.upload-effect-level-pin');
+  var uploadEffectLineElement = uploadEffectElement.querySelector('.upload-effect-level-line');
+  var uploadEffectValueElement = uploadEffectElement.querySelector('.upload-effect-level-value');
+  var uploadEffectFillElement = uploadEffectElement.querySelector('.upload-effect-level-val');
+
+  uploadEffectPinElement.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoordX = evt.clientX;
+    var lineWidth = parseInt(getComputedStyle(uploadEffectLineElement).width, RADIX_TEN);
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = startCoordX - moveEvt.clientX;
+      var percent = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift);
+
+      startCoordX = moveEvt.clientX;
+
+      if (percent < 0 || percent > 100) {
+        return;
+      } else {
+        evt.target.style.left = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
+      }
+
+      uploadEffectFillElement.style.width = evt.target.style.left;
+      uploadEffectValueElement.value = parseInt(evt.target.style.left, RADIX_TEN);
+
+      var currentEffect = defineEffect(uploadImageElement);
+
+      setEffectValue(currentEffect);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 })();
