@@ -8,10 +8,8 @@
     'phobos',
     'heat'
   ];
-  var RADIX_TEN = 10;
   var OPERATOR_DEC = 'dec';
   var OPERATOR_INC = 'inc';
-  var PERCENT_FACTOR = 100;
   var HASHTAG_SYMBOL = '#';
   var HASHTAG_COUNT = 5;
   var HASHTAG_LENGTH = 20;
@@ -86,7 +84,7 @@
   var setDefaultEffectValue = function (pin, fillBar, valueInput) {
     pin.style.left = '20%';
     fillBar.style.width = '20%';
-    valueInput.value = parseInt(uploadEffectPinElement.style.left, RADIX_TEN);
+    valueInput.value = parseInt(uploadEffectPinElement.style.left, window.util.RADIX_TEN);
   };
 
   var onEffectRadioClick = function (evt) {
@@ -116,52 +114,21 @@
   uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
   uploadEffectsContainerElement.addEventListener('click', onEffectRadioClick);
 
-  var getScaleValue = function (input, operator) {
-    var value = parseInt(input.value, RADIX_TEN);
-    var step = parseInt(input.dataset.step, RADIX_TEN);
-    var min = parseInt(input.dataset.min, RADIX_TEN);
-    var max = parseInt(input.dataset.max, RADIX_TEN);
+  var setScaleValue = function (target, input, resizeValue) {
+    var scaleValue = parseInt(resizeValue, window.util.RADIX_TEN) / window.util.PERCENT_FACTOR;
 
-    if (value !== min || value !== max) {
-      var result;
-
-      if (operator === 'dec') {
-        result = value - step;
-      }
-
-      if (operator === 'inc') {
-        result = value + step;
-      }
-
-      if (result < min) {
-        result = min;
-      }
-
-      if (result > max) {
-        result = max;
-      }
-
-      input.value = result + '%';
-    }
-
-    return result;
-  };
-
-  var setScaleValue = function (operator, factor, radix) {
-    var resizeValue = getScaleValue(uploadResizeValueElement, operator);
-    var scaleValue = parseInt(resizeValue, radix) / factor;
-
-    uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
+    input.value = resizeValue + '%';
+    target.style.transform = 'scale(' + scaleValue + ')';
   };
 
   var onResizeDecClick = function (evt) {
     evt.preventDefault();
-    setScaleValue(OPERATOR_DEC, PERCENT_FACTOR, RADIX_TEN);
+    window.initializeScale(uploadImageElement, uploadResizeValueElement, OPERATOR_DEC, setScaleValue);
   };
 
   var onResizeIncClick = function (evt) {
     evt.preventDefault();
-    setScaleValue(OPERATOR_INC, PERCENT_FACTOR, RADIX_TEN);
+    window.initializeScale(uploadImageElement, uploadResizeValueElement, OPERATOR_INC, setScaleValue);
   };
 
   var setErrorState = function (element, message) {
@@ -234,24 +201,24 @@
     evt.preventDefault();
 
     var startCoordX = evt.clientX;
-    var lineWidth = parseInt(getComputedStyle(uploadEffectLineElement).width, RADIX_TEN);
+    var lineWidth = parseInt(getComputedStyle(uploadEffectLineElement).width, window.util.RADIX_TEN);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
       var shift = startCoordX - moveEvt.clientX;
-      var percent = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift);
+      var percent = (window.util.PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift);
 
       startCoordX = moveEvt.clientX;
 
       if (percent < 0 || percent > 100) {
         return;
       } else {
-        evt.target.style.left = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
+        evt.target.style.left = (window.util.PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
       }
 
       uploadEffectFillElement.style.width = evt.target.style.left;
-      uploadEffectValueElement.value = parseInt(evt.target.style.left, RADIX_TEN);
+      uploadEffectValueElement.value = parseInt(evt.target.style.left, window.util.RADIX_TEN);
 
       var currentEffect = defineEffect(uploadImageElement);
 
