@@ -41,11 +41,11 @@
     }
   };
 
-  var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
-
   var onUploadFileElementChange = function () {
     window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
   };
+
+  var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
 
   var removeCurrentEffect = function (element, effectsList) {
     var imageClasses = element.classList;
@@ -89,20 +89,27 @@
     valueInput.value = parseInt(uploadEffectPinElement.style.left, RADIX_TEN);
   };
 
+  var applyFilters = function (target, effect) {
+    var effectStyleClass = 'effect-' + effect;
+
+    removeCurrentEffect(target, EFFECTS);
+
+    if (effect !== 'none') {
+      target.classList.add(effectStyleClass);
+    }
+  };
+
   var onEffectRadioClick = function (evt) {
     if (evt.target.name === 'effect') {
       var effect = evt.target.value;
-      var effectStyleClass = 'effect-' + effect;
-
-      removeCurrentEffect(uploadImageElement, EFFECTS);
 
       if (effect !== 'none') {
-        uploadImageElement.classList.add(effectStyleClass);
         uploadEffectElement.classList.remove('hidden');
       } else {
         uploadEffectElement.classList.add('hidden');
       }
 
+      window.initializeFilters(uploadImageElement, effect, applyFilters);
       uploadImageElement.removeAttribute('style');
 
       var currentEffect = defineEffect(uploadImageElement);
