@@ -8,8 +8,6 @@
     'phobos',
     'heat'
   ];
-  var OPERATOR_DEC = 'dec';
-  var OPERATOR_INC = 'inc';
   var HASHTAG_SYMBOL = '#';
   var HASHTAG_COUNT = 5;
   var HASHTAG_LENGTH = 20;
@@ -21,8 +19,7 @@
   var uploadCommentElement = uploadFormElement.querySelector('.upload-form-description');
   var uploadEffectsContainerElement = uploadFormElement.querySelector('.upload-effect-controls');
   var uploadResizeValueElement = uploadFormElement.querySelector('.upload-resize-controls-value');
-  var uploadRezizeIncElement = uploadFormElement.querySelector('.upload-resize-controls-button-inc');
-  var uploadRezizeDecElement = uploadFormElement.querySelector('.upload-resize-controls-button-dec');
+  var uploadRezizeElement = uploadFormElement.querySelector('.upload-resize-controls');
   var uploadHashtagsElement = uploadFormElement.querySelector('.upload-form-hashtags');
 
   var onUploadCloseElementClick = function () {
@@ -39,11 +36,11 @@
     }
   };
 
-  var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
-
   var onUploadFileElementChange = function () {
     window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
   };
+
+  var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
 
   var removeCurrentEffect = function (element, effectsList) {
     var imageClasses = element.classList;
@@ -87,49 +84,35 @@
     valueInput.value = parseInt(uploadEffectPinElement.style.left, window.util.RADIX_TEN);
   };
 
-  var onEffectRadioClick = function (evt) {
-    if (evt.target.name === 'effect') {
-      var effect = evt.target.value;
-      var effectStyleClass = 'effect-' + effect;
+  var applyFilters = function (effect) {
+    var effectStyleClass = 'effect-' + effect;
 
-      removeCurrentEffect(uploadImageElement, EFFECTS);
+    removeCurrentEffect(uploadImageElement, EFFECTS);
 
-      if (effect !== 'none') {
-        uploadImageElement.classList.add(effectStyleClass);
-        uploadEffectElement.classList.remove('hidden');
-      } else {
-        uploadEffectElement.classList.add('hidden');
-      }
-
-      uploadImageElement.removeAttribute('style');
-
-      var currentEffect = defineEffect(uploadImageElement);
-
-      setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
-      setEffectValue(currentEffect);
+    if (effect !== 'none') {
+      uploadEffectElement.classList.remove('hidden');
+      uploadImageElement.classList.add(effectStyleClass);
+    } else {
+      uploadEffectElement.classList.add('hidden');
     }
+
+    uploadImageElement.removeAttribute('style');
+
+    var currentEffect = defineEffect(uploadImageElement);
+
+    setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
+    setEffectValue(currentEffect);
   };
 
   uploadFileElement.addEventListener('change', onUploadFileElementChange);
   uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
-  uploadEffectsContainerElement.addEventListener('click', onEffectRadioClick);
+  window.initializeFilters(uploadEffectsContainerElement, applyFilters);
 
-  var setScaleValue = function (target, input, resizeValue) {
-    var scaleValue = parseInt(resizeValue, window.util.RADIX_TEN) / window.util.PERCENT_FACTOR;
-
-    input.value = resizeValue + '%';
-    target.style.transform = 'scale(' + scaleValue + ')';
+  var setScaleValue = function (scaleValue) {
+    uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
   };
 
-  var onResizeDecClick = function (evt) {
-    evt.preventDefault();
-    window.initializeScale(uploadImageElement, uploadResizeValueElement, OPERATOR_DEC, setScaleValue);
-  };
-
-  var onResizeIncClick = function (evt) {
-    evt.preventDefault();
-    window.initializeScale(uploadImageElement, uploadResizeValueElement, OPERATOR_INC, setScaleValue);
-  };
+  window.initializeScale(uploadRezizeElement, uploadResizeValueElement, setScaleValue);
 
   var setErrorState = function (element, message) {
     element.style.borderColor = 'red';
@@ -140,9 +123,6 @@
     element.style.borderColor = '';
     element.setCustomValidity('');
   };
-
-  uploadRezizeDecElement.addEventListener('click', onResizeDecClick);
-  uploadRezizeIncElement.addEventListener('click', onResizeIncClick);
 
   uploadHashtagsElement.addEventListener('change', function (evt) {
     var hashtags = evt.currentTarget.value.toLowerCase().split(' ');
