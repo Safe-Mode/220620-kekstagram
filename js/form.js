@@ -89,39 +89,29 @@
     valueInput.value = parseInt(uploadEffectPinElement.style.left, RADIX_TEN);
   };
 
-  var applyFilters = function (target, effect) {
+  var applyFilters = function (effect) {
     var effectStyleClass = 'effect-' + effect;
 
-    removeCurrentEffect(target, EFFECTS);
+    removeCurrentEffect(uploadImageElement, EFFECTS);
 
     if (effect !== 'none') {
-      target.classList.add(effectStyleClass);
+      uploadEffectElement.classList.remove('hidden');
+      uploadImageElement.classList.add(effectStyleClass);
+    } else {
+      uploadEffectElement.classList.add('hidden');
     }
-  };
 
-  var onEffectRadioClick = function (evt) {
-    if (evt.target.name === 'effect') {
-      var effect = evt.target.value;
+    uploadImageElement.removeAttribute('style');
 
-      if (effect !== 'none') {
-        uploadEffectElement.classList.remove('hidden');
-      } else {
-        uploadEffectElement.classList.add('hidden');
-      }
+    var currentEffect = defineEffect(uploadImageElement);
 
-      window.initializeFilters(uploadImageElement, effect, applyFilters);
-      uploadImageElement.removeAttribute('style');
-
-      var currentEffect = defineEffect(uploadImageElement);
-
-      setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
-      setEffectValue(currentEffect);
-    }
+    setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
+    setEffectValue(currentEffect);
   };
 
   uploadFileElement.addEventListener('change', onUploadFileElementChange);
   uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
-  uploadEffectsContainerElement.addEventListener('click', onEffectRadioClick);
+  window.initializeFilters(uploadEffectsContainerElement, applyFilters);
 
   var getScaleValue = function (input, operator) {
     var value = parseInt(input.value, RADIX_TEN);
