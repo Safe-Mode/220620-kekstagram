@@ -1,12 +1,9 @@
 'use strict';
 
 (function () {
-<<<<<<< HEAD
-=======
   var OPERATOR_DEC = 'dec';
   var OPERATOR_INC = 'inc';
 
->>>>>>> d0d593729d245639076f1c659f118004653d33f0
   var getScaleValue = function (input, operator) {
     var value = parseInt(input.value, window.util.RADIX_TEN);
     var step = parseInt(input.dataset.step, window.util.RADIX_TEN);
@@ -31,21 +28,13 @@
       if (result > max) {
         result = max;
       }
-<<<<<<< HEAD
-=======
 
       input.value = result + '%';
->>>>>>> d0d593729d245639076f1c659f118004653d33f0
     }
 
     return result;
   };
 
-<<<<<<< HEAD
-  window.initializeScale = function (target, input, operator, callback) {
-    var resizeValue = getScaleValue(input, operator);
-    callback(target, input, resizeValue);
-=======
   window.initializeScale = function (controls, input, callback) {
     var onResizeClick = function (evt) {
       evt.preventDefault();
@@ -74,6 +63,5 @@
     };
 
     controls.addEventListener('click', onResizeClick);
->>>>>>> d0d593729d245639076f1c659f118004653d33f0
   };
 })();
