@@ -108,45 +108,11 @@
   uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
   window.initializeFilters(uploadEffectsContainerElement, applyFilters);
 
-  var getScaleValue = function (input, operator) {
-    var value = parseInt(input.value, window.util.RADIX_TEN);
-    var step = parseInt(input.dataset.step, window.util.RADIX_TEN);
-    var min = parseInt(input.dataset.min, window.util.RADIX_TEN);
-    var max = parseInt(input.dataset.max, window.util.RADIX_TEN);
-
-    if (value !== min || value !== max) {
-      var result;
-
-      if (operator === 'dec') {
-        result = value - step;
-      }
-
-      if (operator === 'inc') {
-        result = value + step;
-      }
-
-      if (result < min) {
-        result = min;
-      }
-
-      if (result > max) {
-        result = max;
-      }
-
-      input.value = result + '%';
-    }
-
-    return result;
-  };
-
-  var setScaleValue = function (operator, factor, radix) {
-    var resizeValue = getScaleValue(uploadResizeValueElement, operator);
-    var scaleValue = parseInt(resizeValue, radix) / factor;
-
+  var setScaleValue = function (scaleValue) {
     uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
   };
 
-  window.initializeScale(uploadRezizeElement, setScaleValue);
+  window.initializeScale(uploadRezizeElement, uploadResizeValueElement, setScaleValue);
 
   var setErrorState = function (element, message) {
     element.style.borderColor = 'red';
