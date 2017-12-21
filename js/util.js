@@ -4,6 +4,8 @@
   window.util = {
     ESC_KEYCODE: 27,
     ENTER_KEYCODE: 13,
+    RADIX_TEN: 10,
+    PERCENT_FACTOR: 100,
 
     getRandomInt: function (min, max) {
       return Math.floor(Math.random() * (max - min)) + min;

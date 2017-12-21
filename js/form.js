@@ -8,10 +8,6 @@
     'phobos',
     'heat'
   ];
-  var RADIX_TEN = 10;
-  var OPERATOR_DEC = 'dec';
-  var OPERATOR_INC = 'inc';
-  var PERCENT_FACTOR = 100;
   var HASHTAG_SYMBOL = '#';
   var HASHTAG_COUNT = 5;
   var HASHTAG_LENGTH = 20;
@@ -23,8 +19,7 @@
   var uploadCommentElement = uploadFormElement.querySelector('.upload-form-description');
   var uploadEffectsContainerElement = uploadFormElement.querySelector('.upload-effect-controls');
   var uploadResizeValueElement = uploadFormElement.querySelector('.upload-resize-controls-value');
-  var uploadRezizeIncElement = uploadFormElement.querySelector('.upload-resize-controls-button-inc');
-  var uploadRezizeDecElement = uploadFormElement.querySelector('.upload-resize-controls-button-dec');
+  var uploadRezizeElement = uploadFormElement.querySelector('.upload-resize-controls');
   var uploadHashtagsElement = uploadFormElement.querySelector('.upload-form-hashtags');
 
   var onUploadCloseElementClick = function () {
@@ -86,7 +81,7 @@
   var setDefaultEffectValue = function (pin, fillBar, valueInput) {
     pin.style.left = '20%';
     fillBar.style.width = '20%';
-    valueInput.value = parseInt(uploadEffectPinElement.style.left, RADIX_TEN);
+    valueInput.value = parseInt(uploadEffectPinElement.style.left, window.util.RADIX_TEN);
   };
 
   var applyFilters = function (effect) {
@@ -114,10 +109,10 @@
   window.initializeFilters(uploadEffectsContainerElement, applyFilters);
 
   var getScaleValue = function (input, operator) {
-    var value = parseInt(input.value, RADIX_TEN);
-    var step = parseInt(input.dataset.step, RADIX_TEN);
-    var min = parseInt(input.dataset.min, RADIX_TEN);
-    var max = parseInt(input.dataset.max, RADIX_TEN);
+    var value = parseInt(input.value, window.util.RADIX_TEN);
+    var step = parseInt(input.dataset.step, window.util.RADIX_TEN);
+    var min = parseInt(input.dataset.min, window.util.RADIX_TEN);
+    var max = parseInt(input.dataset.max, window.util.RADIX_TEN);
 
     if (value !== min || value !== max) {
       var result;
@@ -151,15 +146,7 @@
     uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
   };
 
-  var onResizeDecClick = function (evt) {
-    evt.preventDefault();
-    setScaleValue(OPERATOR_DEC, PERCENT_FACTOR, RADIX_TEN);
-  };
-
-  var onResizeIncClick = function (evt) {
-    evt.preventDefault();
-    setScaleValue(OPERATOR_INC, PERCENT_FACTOR, RADIX_TEN);
-  };
+  window.initializeScale(uploadRezizeElement, setScaleValue);
 
   var setErrorState = function (element, message) {
     element.style.borderColor = 'red';
@@ -170,9 +157,6 @@
     element.style.borderColor = '';
     element.setCustomValidity('');
   };
-
-  uploadRezizeDecElement.addEventListener('click', onResizeDecClick);
-  uploadRezizeIncElement.addEventListener('click', onResizeIncClick);
 
   uploadHashtagsElement.addEventListener('change', function (evt) {
     var hashtags = evt.currentTarget.value.toLowerCase().split(' ');
@@ -231,24 +215,24 @@
     evt.preventDefault();
 
     var startCoordX = evt.clientX;
-    var lineWidth = parseInt(getComputedStyle(uploadEffectLineElement).width, RADIX_TEN);
+    var lineWidth = parseInt(getComputedStyle(uploadEffectLineElement).width, window.util.RADIX_TEN);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
       var shift = startCoordX - moveEvt.clientX;
-      var percent = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift);
+      var percent = (window.util.PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift);
 
       startCoordX = moveEvt.clientX;
 
       if (percent < 0 || percent > 100) {
         return;
       } else {
-        evt.target.style.left = (PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
+        evt.target.style.left = (window.util.PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
       }
 
       uploadEffectFillElement.style.width = evt.target.style.left;
-      uploadEffectValueElement.value = parseInt(evt.target.style.left, RADIX_TEN);
+      uploadEffectValueElement.value = parseInt(evt.target.style.left, window.util.RADIX_TEN);
 
       var currentEffect = defineEffect(uploadImageElement);
 
