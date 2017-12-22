@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var DOWNLOAD_URL = 'https://js.dump.academy/kekstagram/data';
+
   var picturesElement = document.querySelector('.pictures');
   var galleryOverlayElement = document.querySelector('.gallery-overlay');
   var galleryCloseElement = galleryOverlayElement.querySelector('.gallery-overlay-close');
@@ -18,7 +20,7 @@
     }
   };
 
-  window.appendPicture(window.data, picturesElement);
+  window.backend.load(DOWNLOAD_URL, window.appendPicture, window.util.onXHRError);
   picturesElement.addEventListener('click', onPhotoClick);
 
   galleryCloseElement.addEventListener('click', function (evt) {
@@ -31,4 +33,6 @@
       window.util.toggleOverlay(galleryOverlayElement, onPopupEscPress);
     }
   });
+
+  window.gallery = picturesElement;
 })();
