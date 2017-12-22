@@ -218,10 +218,15 @@
   });
 
   var formElement = document.querySelector('.upload-form');
-  // var formCancelElement = formElement.querySelector('.upload-form-cancel');
 
   var onLoadUserData = function () {
     window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
+    formElement.reset();
+    removeCurrentEffect(uploadImageElement, EFFECTS);
+    setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
+
+    uploadImageElement.removeAttribute('style');
+    uploadEffectElement.classList.add('hidden');
     uploadFileElement.value = '';
   };
 
