@@ -20,6 +20,6 @@
       fragment.appendChild(renderPhoto(elements[i]));
     }
 
-    window.picturesElement.appendChild(fragment);
+    window.gallery.appendChild(fragment);
   };
 })();
