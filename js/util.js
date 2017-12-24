@@ -7,10 +7,6 @@
     RADIX_TEN: 10,
     PERCENT_FACTOR: 100,
 
-    getRandomInt: function (min, max) {
-      return Math.floor(Math.random() * (max - min)) + min;
-    },
-
     toggleOverlay: function (overlay, escHandler) {
       if (overlay.classList.contains('hidden')) {
         overlay.classList.remove('hidden');
