@@ -97,8 +97,6 @@
       uploadEffectElement.classList.add('hidden');
     }
 
-    uploadImageElement.removeAttribute('style');
-
     var currentEffect = defineEffect(uploadImageElement);
 
     setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
