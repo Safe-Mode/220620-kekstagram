@@ -44,9 +44,7 @@
       var scaleValue;
 
       evt.target.classList.forEach(function (item) {
-        if (item.slice(-3) === 'dec') {
-          isDecOperator = true;
-        }
+        isDecOperator = (item.slice(-3) === 'dec') ? true : false;
       });
 
       if (isDecOperator) {

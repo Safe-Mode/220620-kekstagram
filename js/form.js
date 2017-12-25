@@ -46,15 +46,15 @@
   var removeCurrentEffect = function (element, effectsList) {
     var imageClasses = element.classList;
 
-    for (var i = 0; i < imageClasses.length; i++) {
-      for (var j = 0; j < effectsList.length; j++) {
-        var effectClass = 'effect-' + effectsList[j];
+    imageClasses.forEach(function (imageClass) {
+      effectsList.forEach(function (effect) {
+        var effectClass = 'effect-' + effect;
 
-        if (imageClasses[i] === effectClass) {
-          element.classList.remove(imageClasses[i]);
+        if (imageClass === effectClass) {
+          element.classList.remove(imageClass);
         }
-      }
-    }
+      });
+    });
   };
 
   var defineEffect = function (element) {
@@ -128,7 +128,6 @@
   uploadHashtagsElement.addEventListener('change', function (evt) {
     var hashtags = evt.currentTarget.value.toLowerCase().split(' ');
     var target = evt.target;
-    var j;
 
     if (hashtags.length > HASHTAG_COUNT) {
       setErrorState(target, 'Максимальное число хэштэгов - ' + HASHTAG_COUNT);
@@ -137,39 +136,39 @@
       setOrdinaryState(target);
     }
 
-    for (var i = 0; i < hashtags.length; i++) {
-      if (hashtags[i][0] !== HASHTAG_SYMBOL) {
+    hashtags.forEach(function (hashtag, index) {
+      if (hashtag[0] !== HASHTAG_SYMBOL) {
         setErrorState(target, 'Хэштэг должен начинаться со знака #');
         return;
       } else {
         setOrdinaryState(target);
       }
 
-      if (hashtags[i].length > HASHTAG_LENGTH) {
+      if (hashtag.length > HASHTAG_LENGTH) {
         setErrorState(target, 'Максимальная длина хэштэга - ' + HASHTAG_LENGTH + ' символов');
         return;
       } else {
         setOrdinaryState(target);
       }
 
-      for (j = 0; j < hashtags.length; j++) {
-        if (hashtags[i] === hashtags[j] && i !== j) {
+      hashtags.forEach(function (hashtagInner, indexInner) {
+        if (hashtag === hashtagInner && index !== indexInner) {
           setErrorState(target, 'Хэштэги не должны повторяться');
           return;
         } else {
           setOrdinaryState(target);
         }
-      }
+      });
 
-      for (j = 0; j < hashtags[i].length; j++) {
-        if (hashtags[i][j] === HASHTAG_SYMBOL && j !== 0) {
+      for (var i = 0; i < hashtag.length; i++) {
+        if (hashtag[i] === HASHTAG_SYMBOL && i !== 0) {
           setErrorState(target, 'Хэштэги должны разделяться пробелами');
           return;
         } else {
           setOrdinaryState(target);
         }
       }
-    }
+    });
   });
 
   var uploadEffectElement = uploadFormElement.querySelector('.upload-effect-level');
@@ -192,9 +191,7 @@
 
       startCoordX = moveEvt.clientX;
 
-      if (percent < 0 || percent > 100) {
-        return;
-      } else {
+      if (percent >= 0 && percent <= 100) {
         evt.target.style.left = (window.util.PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
       }
 
