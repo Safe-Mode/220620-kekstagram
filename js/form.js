@@ -191,9 +191,7 @@
 
       startCoordX = moveEvt.clientX;
 
-      if (percent < 0 || percent > 100) {
-        return;
-      } else {
+      if (percent >= 0 && percent <= 100) {
         evt.target.style.left = (window.util.PERCENT_FACTOR / lineWidth) * (evt.target.offsetLeft - shift) + '%';
       }
 
