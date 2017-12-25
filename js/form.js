@@ -97,6 +97,8 @@
       uploadEffectElement.classList.add('hidden');
     }
 
+    uploadImageElement.style.filter = '';
+
     var currentEffect = defineEffect(uploadImageElement);
 
     setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
