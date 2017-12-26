@@ -3,11 +3,11 @@
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-  var fileChooser = document.querySelector('.upload-input');
-  var preview = document.querySelector('.effect-image-preview');
+  var uploadFileElement = document.querySelector('.upload-input');
+  var uploadImageElement = document.querySelector('.effect-image-preview');
 
-  fileChooser.addEventListener('change', function () {
-    var file = fileChooser.files[0];
+  uploadFileElement.addEventListener('change', function () {
+    var file = uploadFileElement.files[0];
     var fileName = file.name.toLowerCase();
 
     var matches = FILE_TYPES.some(function (type) {
@@ -18,10 +18,15 @@
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        preview.src = reader.result;
+        uploadImageElement.src = reader.result;
       });
 
       reader.readAsDataURL(file);
     }
   });
+
+  window.photo = {
+    fileInput: uploadFileElement,
+    preview: uploadImageElement
+  };
 })();

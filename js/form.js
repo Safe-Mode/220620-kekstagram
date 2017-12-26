@@ -14,7 +14,6 @@
   var HASHTAG_LENGTH = 20;
 
   var uploadFormElement = document.querySelector('#upload-select-image');
-  var uploadFileElement = uploadFormElement.querySelector('#upload-file');
   var uploadOverlayElement = uploadFormElement.querySelector('.upload-overlay');
   var uploadCloseElement = uploadFormElement.querySelector('.upload-form-cancel');
   var uploadCommentElement = uploadFormElement.querySelector('.upload-form-description');
@@ -25,7 +24,7 @@
 
   var onUploadCloseElementClick = function () {
     window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
-    uploadFileElement.value = '';
+    window.photo.fileInput.value = '';
   };
 
   var onUploadOverlayEscPress = function (evt) {
@@ -33,15 +32,13 @@
 
     if (evt.keyCode === window.util.ESC_KEYCODE && activeElement !== uploadCommentElement) {
       window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
-      uploadFileElement.value = '';
+      window.photo.fileInput.value = '';
     }
   };
 
   var onUploadFileElementChange = function () {
     window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
   };
-
-  var uploadImageElement = uploadFormElement.querySelector('.effect-image-preview');
 
   var removeCurrentEffect = function (element, effectsList) {
     var imageClasses = element.classList;
@@ -67,15 +64,15 @@
 
   var setEffectValue = function (effect) {
     if (effect === 'grayscale' || effect === 'sepia') {
-      uploadImageElement.style.filter = effect + '(' + 0.01 * uploadEffectValueElement.value + ')';
+      window.photo.preview.style.filter = effect + '(' + 0.01 * uploadEffectValueElement.value + ')';
     } else if (effect === 'invert') {
-      uploadImageElement.style.filter = effect + '(' + uploadEffectValueElement.value + '%' + ')';
+      window.photo.preview.style.filter = effect + '(' + uploadEffectValueElement.value + '%' + ')';
     } else if (effect === 'blur') {
-      uploadImageElement.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + 'px' + ')';
+      window.photo.preview.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + 'px' + ')';
     } else if (effect === 'brightness') {
-      uploadImageElement.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + ')';
+      window.photo.preview.style.filter = effect + '(' + 0.03 * uploadEffectValueElement.value + ')';
     } else {
-      uploadImageElement.style.filter = '';
+      window.photo.preview.style.filter = '';
     }
   };
 
@@ -88,29 +85,29 @@
   var applyFilters = function (effect) {
     var effectStyleClass = 'effect-' + effect;
 
-    removeCurrentEffect(uploadImageElement, EFFECTS);
+    removeCurrentEffect(window.photo.preview, EFFECTS);
 
     if (effect !== 'none') {
       uploadEffectElement.classList.remove('hidden');
-      uploadImageElement.classList.add(effectStyleClass);
+      window.photo.preview.classList.add(effectStyleClass);
     } else {
       uploadEffectElement.classList.add('hidden');
     }
 
-    uploadImageElement.style.filter = '';
+    window.photo.preview.style.filter = '';
 
-    var currentEffect = defineEffect(uploadImageElement);
+    var currentEffect = defineEffect(window.photo.preview);
 
     setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
     setEffectValue(currentEffect);
   };
 
-  uploadFileElement.addEventListener('change', onUploadFileElementChange);
+  window.photo.fileInput.addEventListener('change', onUploadFileElementChange);
   uploadCloseElement.addEventListener('click', onUploadCloseElementClick);
   window.initializeFilters(uploadEffectsContainerElement, applyFilters);
 
   var setScaleValue = function (scaleValue) {
-    uploadImageElement.style.transform = 'scale(' + scaleValue + ')';
+    window.photo.preview.style.transform = 'scale(' + scaleValue + ')';
   };
 
   window.initializeScale(uploadRezizeElement, uploadResizeValueElement, setScaleValue);
@@ -151,14 +148,14 @@
         setOrdinaryState(target);
       }
 
-      hashtags.forEach(function (hashtagInner, indexInner) {
-        if (hashtag === hashtagInner && index !== indexInner) {
+      for (i = 0; i < hashtags.length; i++) {
+        if (hashtag === hashtags[i] && index !== i) {
           setErrorState(target, 'Хэштэги не должны повторяться');
           return;
         } else {
           setOrdinaryState(target);
         }
-      });
+      }
 
       for (var i = 0; i < hashtag.length; i++) {
         if (hashtag[i] === HASHTAG_SYMBOL && i !== 0) {
@@ -198,7 +195,7 @@
       uploadEffectFillElement.style.width = evt.target.style.left;
       uploadEffectValueElement.value = parseInt(evt.target.style.left, window.util.RADIX_TEN);
 
-      var currentEffect = defineEffect(uploadImageElement);
+      var currentEffect = defineEffect(window.photo.preview);
 
       setEffectValue(currentEffect);
     };
@@ -219,12 +216,12 @@
   var onLoadUserData = function () {
     window.util.toggleOverlay(uploadOverlayElement, onUploadOverlayEscPress);
     formElement.reset();
-    removeCurrentEffect(uploadImageElement, EFFECTS);
+    removeCurrentEffect(window.photo.preview, EFFECTS);
     setDefaultEffectValue(uploadEffectPinElement, uploadEffectFillElement, uploadEffectValueElement);
 
-    uploadImageElement.removeAttribute('style');
+    window.photo.preview.removeAttribute('style');
     uploadEffectElement.classList.add('hidden');
-    uploadFileElement.value = '';
+    window.photo.fileInput.value = '';
   };
 
   formElement.addEventListener('submit', function (evt) {
