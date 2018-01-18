@@ -7,13 +7,13 @@
     RADIX_TEN: 10,
     PERCENT_FACTOR: 100,
 
-    toggleOverlay: function (overlay, escHandler) {
+    toggleOverlay: function (overlay, onEscPress) {
       if (overlay.classList.contains('hidden')) {
         overlay.classList.remove('hidden');
-        document.addEventListener('keydown', escHandler);
+        document.addEventListener('keydown', onEscPress);
       } else {
         overlay.classList.add('hidden');
-        document.removeEventListener('keydown', escHandler);
+        document.removeEventListener('keydown', onEscPress);
       }
     },
 
